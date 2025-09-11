@@ -28,4 +28,37 @@ export const fetchMovies = async ({
   const data = await response.json();
   return data.results;
 };
+
+export const fetchMovieDetails = async (movieId: string): Promise<MovieDetails> => {
+  try {
+    const result = await fetch(`${TMDB_CONFIG.BASE_URL}/movie/${movieId}?api_key=${TMDB_CONFIG.API_KEY}`,{
+      method: 'GET',
+      headers: TMDB_CONFIG.headers
+    });
+
+    if(!result.ok){
+      throw new Error('Failed to fetch movie details');
+    }
+    const data = await result.json();
+    return data;
+  } catch (error) {
+    console.log(error)
+  }
+}
+export const fetchTrendingMovies = async (): Promise<Movie[]> => {
+  try{
+    const result = await fetch(`${TMDB_CONFIG.BASE_URL}/trending/movie/day?api_key=${TMDB_CONFIG.API_KEY}`,{
+      method: 'GET',
+      headers: TMDB_CONFIG.headers
+    });
+
+    if(!result.ok){
+      throw new Error('Failed to fetch trending movies');
+    }
+    const data = await result.json();
+    return data.results as Movie[];
+  }catch(error){
+    console.log(error);
+  }
+}
 // const url = 'https://api.themoviedb.org/3/keyword/keyword_id/movies?include_adult=false&language=en-US&page=1';
